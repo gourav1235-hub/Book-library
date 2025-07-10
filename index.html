@@ -489,25 +489,50 @@
 
         @media (max-width: 480px) {
             .books-grid {
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                gap: 15px;
-                scroll-snap-type: x mandatory;
-                padding-bottom: 10px;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                /* 4 columns */
+                gap: 10px;
             }
 
             .book-card {
-                flex: 0 0 auto;
-                width: 70%;
-                scroll-snap-align: start;
-                min-width: 240px;
+                padding: 0;
+                margin: 0;
+                height: auto;
             }
 
             .book-cover {
-                height: 200px;
+                height: 120px;
+                /* smaller for mobile */
+            }
+
+            .book-info {
+                padding: 10px;
+            }
+
+            .book-info h3 {
+                font-size: 0.8rem;
+            }
+
+            .book-info .author {
+                font-size: 0.7rem;
+            }
+
+            .book-info .genre {
+                font-size: 0.65rem;
+            }
+
+            .book-detail {
+                padding: 20px;
+            }
+
+            .detail-cover {
+                height: 250px;
+                flex: 0 0 180px;
             }
         }
+
+
 
 
 
