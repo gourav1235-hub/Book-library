@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Bookshelf | Free Digital Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --deep-purple: #121212;
+            /* Base background (deep black) */
+            --navy-blue: #1e1e2f;
+            /* Secondary background */
+            --dark-bg: #0d0d0d;
+            /* Overall page bg */
+            --card-bg: rgba(32, 32, 44, 0.9);
+            /* Glassy card feel */
+
+            --accent: #7f5af0;
+            /* Trendy purple/indigo */
+            --accent-light: #a78bfa;
+            /* Lighter accent for gradients/buttons */
+
+            --text: #f5f5f7;
+            /* Main text */
+            --text-secondary: #9ca3af;
+            /* Descriptive/subdued text */
+
+            --search-bg: #1e1e2f;
+            /* Background for inputs */
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg), var(--deep-purple), var(--navy-blue));
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 40px;
+            background-attachment: fixed;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(10, 6, 21, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(122, 77, 224, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            color: var(--accent-light);
+            font-size: 2.2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 1px;
+            position: relative;
+            animation: floatGlow 3s ease-in-out infinite;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes floatGlow {
+            0% {
+                transform: translateY(0px);
+                text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            }
+
+            50% {
+                transform: translateY(-4px);
+                text-shadow: 0 0 18px rgba(255, 255, 255, 0.4);
+            }
+
+            100% {
+                transform: translateY(0px);
+                text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .search-bar {
+            display: flex;
+            max-width: 500px;
+            width: 50%;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 20px;
+            background: rgba(30, 15, 60, 0.5);
+            border: 1px solid rgba(122, 77, 224, 0.3);
+            border-radius: 30px 0 0 30px;
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-bar button {
+            padding: 12px 20px;
+            background: var(--accent);
+            border: none;
+            border-radius: 0 30px 30px 0;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: var(--accent-light);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 5% 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1.2px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #a78bfa, #7f5af0, #a78bfa);
+            background-size: 200% auto;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            text-shadow: 0 0 8px rgba(127, 90, 240, 0.3),
+                0 0 16px rgba(167, 139, 250, 0.2);
+
+            animation: shine 3s linear infinite;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+
+
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-radius: 15px;
+            min-width: 160px;
+            border: 1px solid rgba(122, 77, 224, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-box h3 {
+            font-size: 2.5rem;
+            color: var(--accent-light);
+            margin-bottom: 5px;
+        }
+
+        .stat-box p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Books Grid */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 70%;
+            width: 5px;
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Book Card */
+        .book-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(122, 77, 224, 0.15);
+            opacity: 0.95;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            opacity: 1;
+            box-shadow: 0 15px 30px rgba(122, 77, 224, 0.3);
+            border: 1px solid rgba(122, 77, 224, 0.4);
+        }
+
+        .book-cover {
+            height: 280px;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .book-info {
+            padding: 20px;
+        }
+
+        .book-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .book-info .author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .book-info .genre {
+            display: inline-block;
+            background: rgba(122, 77, 224, 0.2);
+            color: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* Book Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 6, 21, 0.95);
+            z-index: 1000;
+            overflow: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, var(--deep-purple), var(--navy-blue));
+            max-width: 900px;
+            margin: 5% auto;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(122, 77, 224, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            z-index: 10;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .book-detail {
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+        }
+
+        .detail-top {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .detail-cover {
+            flex: 0 0 280px;
+            height: 380px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(122, 77, 224, 0.3);
+        }
+
+        .detail-info {
+            flex: 1;
+        }
+
+        .detail-info h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .detail-info .author {
+            font-size: 1.3rem;
+            color: var(--accent-light);
+            margin-bottom: 20px;
+        }
+
+        .detail-info .meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: rgba(30, 15, 60, 0.5);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(122, 77, 224, 0.2);
+        }
+
+        .description {
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-read {
+            background: var(--accent);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-read:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(122, 77, 224, 0.4);
+        }
+
+        .btn-download {
+            background: transparent;
+            color: var(--accent-light);
+            border: 2px solid var(--accent);
+            flex: 1;
+        }
+
+        .btn-download:hover {
+            background: rgba(122, 77, 224, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 5%;
+            margin-top: 50px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(122, 77, 224, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .detail-top {
+                flex-direction: column;
+            }
+
+            .detail-cover {
+                margin: 0 auto;
+            }
+
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .stat-box {
+                padding: 15px 20px;
+                min-width: 120px;
+            }
+
+            .stat-box h3 {
+                font-size: 1.8rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .books-grid {
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 15px;
+                scroll-snap-type: x mandatory;
+                padding-bottom: 10px;
+            }
+
+            .book-card {
+                flex: 0 0 auto;
+                width: 70%;
+                scroll-snap-align: start;
+                min-width: 240px;
+            }
+
+            .book-cover {
+                height: 200px;
+            }
+        }
+
+
+
+        @media (max-width: 480px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 20px;
+            }
+
+            .book-detail {
+                padding: 30px 20px;
+            }
+
+            .detail-cover {
+                height: 320px;
+                flex: 0 0 220px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header with Logo and Search -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-book-open"></i>
+            <h1>Bookhub</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search over 2 million free books...">
+            <button id="searchButton"><i class="fas fa-search"></i></button>
+        </div>
+        <button id="backButton"
+            style="display: none; margin-top: 10px; background: transparent; border: 2px solid var(--accent); color: var(--accent-light); padding: 10px 20px; border-radius: 30px; cursor: pointer;">
+            ← Back to All Books
+        </button>
+
+
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Discover the World of Free Knowledge</h2>
+        <p>Explore our collection of over 2 million books, available for instant reading or download. All completely
+            free and accessible anytime, anywhere.<br>&nbsp;<b>- Gourav Sarkar</b></p>
+
+        <div class="stats">
+            <div class="stat-box">
+                <h3>2M+</h3>
+                <p>Books Available</p>
+            </div>
+            <div class="stat-box">
+                <h3>100+</h3>
+                <p>Languages</p>
+            </div>
+            <div class="stat-box">
+                <h3>100+</h3>
+                <p>New Books Weekly</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Collections -->
+    <div class="container">
+        <h2 class="section-title">Let’s dive into a book.</h2>
+        <div class="books-grid">
+            <!-- Book cards will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Book Detail Modal -->
+    <div class="modal" id="bookModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="book-detail">
+                <div class="detail-top">
+                    <div class="detail-cover" id="detailCover"></div>
+                    <div class="detail-info">
+                        <h2 id="detailTitle">Book Title</h2>
+                        <div class="author" id="detailAuthor">Author Name</div>
+                        <div class="meta">
+                            <div class="meta-item" id="detailYear">Published: 1900</div>
+                            <div class="meta-item" id="detailPages">320 pages</div>
+                            <div class="meta-item" id="detailGenre">Fiction</div>
+                        </div>
+                        <p class="description" id="detailDescription">
+                            <!-- Description will be inserted here -->
+                        </p>
+                        <div class="actions">
+                            <button class="btn btn-read" id="readBtn">
+                                <i class="fas fa-book-open"></i> Read Online
+                            </button>
+                            <button class="btn btn-download" id="downloadBtn">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Bookhub &copy; 2025 | Free Digital Library for Everyone</p>
+        <p>All books are in the public domain or shared under creative commons licenses</p>
+    </footer>
+
+    <script>
+        // Sample book data
+        const books = [
+            {
+                id: 1,
+                title: "The Alchemist",
+                author: "Paulo Coelho",
+                year: 1988,
+                pages: 205,
+                genre: "Adventure Fiction",
+                cover: "https://m.media-amazon.com/images/I/81UGPuNl7kL._UF1000,1000_QL80_.jpg",
+                description: "The Alchemist by Paulo Coelho is a philosophical fiction and adventure novel. It blends elements of magical realism and spiritual self-discovery. The story follows Santiago, a shepherd, on a journey to find treasure, symbolizing personal legend and destiny. The genre explores themes of fate, dreams, and the universe’s mysterious ways of helping those who follow their purpose.",
+                pdf: "https://ia800907.us.archive.org/2/items/OceanofPDF.comTheAlchemist/_OceanofPDF.com_The_Alchemist.pdf"
+            },
+            {
+                id: 2,
+                title: "A Thousand Splendid Suns",
+                author: "Khaled Hosseini",
+                year: 2007,
+                pages: 384,
+                genre: "Historical fiction",
+                cover: "https://m.media-amazon.com/images/I/81xIPfJ6iUL._UF1000,1000_QL80_.jpg",
+                description: "A Thousand Splendid Suns by Khaled Hosseini is a historical and contemporary fiction novel. Set in Afghanistan, it explores the struggles of women under war, oppression, and patriarchy. The genre blends drama, tragedy, and emotional realism, focusing on themes of love, sacrifice, and resilience. It gives voice to the silent suffering and enduring strength of Afghan women across generations.",
+                pdf: "https://mrsmeganparrish.weebly.com/uploads/3/8/0/5/38056115/a_thousand_splendid_sun.pdf"
+            },
+            {
+                id: 3,
+                title: "Ikigai: The Japanese Secret to a Long and Happy Life",
+                author: "Héctor García & Francesc Miralles",
+                year: 2016,
+                pages: 208,
+                genre: "Self-help, Philosophy",
+                cover: "https://images.meesho.com/images/products/319943166/svqdt_512.webp",
+                description: "The self-help and philosophy genre aims to guide readers toward personal growth, happiness, and purpose. It blends practical advice with deep insights into life’s meaning. Books in this genre encourage reflection, mindfulness, and lifestyle improvements. They often draw from cultural wisdom, psychology, and lived experiences to inspire motivation, resilience, and a deeper understanding of oneself and the world.",
+                pdf: "https://dn790007.ca.archive.org/0/items/ikigai-the-japanese-secret-to-a-long-and-happy-life-pdfdrive.com/Ikigai%20_%20the%20Japanese%20secret%20to%20a%20long%20and%20happy%20life%20%28%20PDFDrive.com%20%29.pdf"
+            },
+            {
+                id: 4,
+                title: "1984",
+                author: "George Orwell",
+                year: 1949,
+                pages: 328,
+                genre: "Dystopian, Political Fiction, Science Fiction",
+                cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6VmCkKoe6KSi2ljFONgOaMMRoNUlzwuXIzQ&s",
+                description: "This genre explores oppressive societies, often controlled by authoritarian regimes or surveillance states. It uses futuristic or alternate realities to critique real-world politics, censorship, and loss of freedom. Through bleak settings and controlled characters, dystopian political fiction warns against totalitarianism and blind conformity, pushing readers to question power, truth, and individual rights in a world of manipulation and control.",
+                pdf: "https://dn790002.ca.archive.org/0/items/NineteenEightyFour-Novel-GeorgeOrwell/orwell1984.pdf"
+            },
+            {
+                id: 5,
+                title: "The Power of Your Subconscious Mind",
+                author: " Dr. Joseph Murphy",
+                year: 1963,
+                pages: 222,
+                genre: "Self-help, Psychology",
+                cover: "https://covers.readinglength.com/MVLssut0-L.webp",
+                description: "This genre focuses on mental well-being, personal development, and the power of thought. It blends psychological principles with motivational strategies to help readers unlock inner potential and overcome mental barriers. Through techniques like affirmations, visualization, and belief shifts, self-help psychology books aim to enhance confidence, success, and overall life satisfaction by understanding and guiding the subconscious mind’s influence.",
+                pdf: "power-of-the-subconscious-mind.pdf"
+            },
+            {
+                id: 6,
+                title: "The Psychology of Money",
+                author: "Morgan Housel",
+                year: 2020,
+                pages: 242,
+                genre: "Finance, Self-help, Psychology",
+                cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1581527774i/41881472.jpg",
+                description: "This genre blends financial wisdom with human behavior. It explains how emotions, habits, and mindset influence money decisions more than knowledge alone. With psychological insights and real-life stories, it encourages smarter, calmer financial choices. The focus is not just on wealth-building but also on understanding one's relationship with money, aiming for long-term security, contentment, and financial well-being.",
+                pdf: "https://inspiredbyislam.wordpress.com/wp-content/uploads/2022/08/the-psychology-of-money-timeless-lessons-on-wealth-greed-and-happiness-morgan-housel-z-lib.org_.pdf"
+            },
+            {
+                id: 7,
+                title: "The Hunger Games",
+                author: "Suzanne Collins",
+                year: 2008,
+                pages: 519,
+                genre: "Dystopian, Science Fiction, Young Adult",
+                cover: "https://upload.wikimedia.org/wikipedia/en/d/dc/The_Hunger_Games.jpg",
+                description: "This genre explores dark future worlds where society faces control, inequality, or rebellion. It combines science fiction elements with emotional, coming-of-age experiences for young readers. These stories often feature brave protagonists challenging corrupt systems, reflecting themes of survival, freedom, and identity. The genre captivates readers with action and emotion while prompting questions about justice, power, and societal values.",
+                pdf: "https://mcla7th.weebly.com/uploads/1/4/0/8/14084007/hunger-games-18.pdf"
+            },
+            {
+                id: 8,
+                title: "To Kill a Mockingbird",
+                author: "Harper Lee",
+                year: 1960,
+                pages: 285,
+                genre: "Classic, Historical Fiction, Coming-of-Age",
+                cover: "https://media.glamour.com/photos/56e1f3c562b398fa64cbd310/master/w_1600%2Cc_limit/entertainment-2016-02-07-main.jpg",
+                description: "This genre combines timeless storytelling with moral and social commentary set in a historical backdrop. It follows a young protagonist's emotional and moral growth, often amid racial, cultural, or societal tensions. Through personal journeys and historical context, it explores justice, empathy, and human dignity. These stories aim to educate, inspire, and resonate across generations with enduring relevance and depth.",
+                pdf: "https://www.raio.org/TKMFullText.pdf"
+            },
+            {
+                id: 8,
+                title: "The Giving Tree",
+                author: "Shel Silverstein",
+                year: 1964,
+                pages: 20,
+                genre: "Children’s Literature, Allegory, Philosophical Fiction",
+                cover: "https://m.media-amazon.com/images/I/41gMQD43r8L._UF1000,1000_QL80_.jpg",
+                description: "This genre uses simple language and vivid imagery to convey deep life lessons. Often written for children, it includes symbolic characters and narratives that explore themes like love, sacrifice, and human nature. Allegorical and philosophical fiction encourages readers of all ages to reflect on relationships, gratitude, and the passage of time through emotionally resonant and meaningful storytelling.",
+                pdf: "https://pdfs.semanticscholar.org/c84e/deb2964322e57adab39f9b76ba5f8ddbe339.pdf"
+            },
+            {
+                id: 8,
+                title: "Bhagavad Gita",
+                author: "Traditionally attributed to Vyasa",
+                year: "Estimated around 2nd century BCE",
+                pages: 900,
+                genre: "Spirituality, Philosophy, Religious Scripture",
+                cover: "https://m.media-amazon.com/images/I/81qG6Sd9ogL._UF1000,1000_QL80_.jpg",
+                description: "This genre offers deep insights into life, duty, and the soul. Blending spiritual teachings with philosophical wisdom, it guides individuals toward inner peace, ethical living, and self-realization. Rooted in divine dialogue, such scriptures aim to elevate human consciousness, address moral dilemmas, and connect the individual with universal truth through timeless lessons on karma, devotion, and spiritual awakening.",
+                pdf: "https://www.prabhupada-books.de/pdf/Bhagavad-gita-As-It-Is.pdf"
+            },
+            {
+                id: 8,
+                title: "The Da Vinci Code",
+                author: "Dan Brown",
+                year: 2003,
+                pages: 383,
+                genre: "Mystery, Thriller, Historical Fiction",
+                cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcRTIyw_BUzyvt8uzs7ppj9YB17hPHijr5SA&s",
+                description: "This genre combines suspenseful storytelling with historical facts and fast-paced action. Mystery and thriller elements keep readers engaged through secrets, puzzles, and high-stakes danger, while historical fiction weaves real-world settings and events into the plot. The result is an exciting blend of intellect and adrenaline, often questioning truth, faith, and hidden knowledge buried in history’s shadows.",
+                pdf: "https://dn790007.ca.archive.org/0/items/TheDaVinciCode_201308/The%20Da%20Vinci%20Code.pdf"
+            },
+            {
+                id: 12,
+                title: "Death: An Inside Story",
+                author: "Sadhguru",
+                year: 2020,
+                pages: 376,
+                genre: "Spirituality, Philosophy, Self-help",
+                cover: "https://m.media-amazon.com/images/I/91JO2pVO7RL.jpg",
+                description: "This genre explores the deeper questions of existence, purpose, and consciousness. It provides guidance for inner transformation and helps readers face life and death with clarity and peace. Combining ancient wisdom with practical insights, these books encourage self-awareness, acceptance, and a balanced life. They serve as tools for introspection, emotional strength, and spiritual evolution in a complex world.",
+                pdf: "https://dn790009.ca.archive.org/0/items/death-an-inside-story-a-book-for-all-those-who-shall-die-sadhguru/Death%3B%20An%20Inside%20Story%20-%20A%20Book%20for%20all%20Those%20who%20Shall%20die%20%28Sadhguru%29.pdf"
+            },
+            {
+                id: 13,
+                title: "Heart of Darkness",
+                author: "Joseph Conrad",
+                year: 1899,
+                pages: 128,
+                genre: "Classic, Psychological Fiction, Colonial Literature",
+                cover: "https://m.media-amazon.com/images/I/71B2HtDDTwL._UF1000,1000_QL80_.jpg",
+                description: "This genre delves into the complexities of the human mind and moral conflict, often set against historical or colonial backdrops. It explores themes like imperialism, identity, and inner darkness. With rich symbolism and introspection, psychological and colonial fiction challenges readers to reflect on civilization, power, and the thin line between savagery and sanity within human nature.",
+                pdf: "https://www.ibiblio.org/ebooks/Conrad/Heart_Darkness.pdf"
+            },
+            {
+                id: 13,
+                title: "The Courtesan, the Mahatma and the Italian Brahmin: Tales from Indian History",
+                author: "Manu S. Pillai",
+                year: 2019,
+                pages: 31,
+                genre: "History, Non-fiction, Indian Historical Essays",
+                cover: "https://m.media-amazon.com/images/I/91blvR7WBUL._UF1000,1000_QL80_.jpg",
+                description: "This genre uncovers real events, people, and cultural shifts from the past, focusing on India’s diverse history. Through well-researched essays, it revives forgotten stories and figures, offering fresh perspectives. Blending scholarship with storytelling, it educates readers while highlighting the richness, complexity, and contradictions of historical narratives. It inspires curiosity and critical thought about heritage, identity, and power across time.",
+                pdf: "https://cdn.bookey.app/files/pdf/book/en/the-courtesan--the-mahatma-and-the-italian-brahmin.pdf"
+            },
+            {
+                id: 13,
+                title: "The Argumentative Indian: Writings on Indian History, Culture and Identity",
+                author: "JAmartya Sen",
+                year: 2005,
+                pages: 432,
+                genre: "Non-fiction, Essays, History, Philosophy",
+                cover: "https://m.media-amazon.com/images/I/81jz1oGFymL._UF1000,1000_QL80_.jpg",
+                description: "This genre delves into the complexities of the human mind and moral conflict, often set against historical or colonial backdrops. It explores themes like imperialism, identity, and inner darkness. With rich symbolism and introspection, psychological and colonial fiction challenges readers to reflect on civilization, power, and the thin line between savagery and sanity within human nature.",
+                pdf: "https://ia803109.us.archive.org/17/items/TheArgumentativeIndian_201805/The%20Argumentative%20Indian.pdf"
+            },
+            {
+                id: 13,
+                title: "The Wonder That Was India",
+                author: "A.L. Basham",
+                year: 1954,
+                pages: 618,
+                genre: "History, Non-fiction, Indian Culture and Civilization",
+                cover: "https://m.media-amazon.com/images/I/A18gz8c-Q4L._UF1000,1000_QL80_.jpg",
+                description: "This genre explores real events, civilizations, and cultural evolution over time. Focused on India, it unveils ancient traditions, religions, arts, and societal structures. It provides a well-researched and objective view of India’s rich and diverse heritage. These works inform readers about historical continuity, intellectual achievements, and cultural depth, encouraging appreciation and understanding of one of the world's oldest civilizations.",
+                pdf: "https://www.rarebooksocietyofindia.org/book_archive/196174216674_10154892000456675.pdf"
+            },
+            {
+                id: 13,
+                title: "The Arthshastra by Kautilya",
+                author: "Kautilya (also known as Chanakya or Vishnugupta)",
+                year: "Estimated around 4th century BCE",
+                pages: 614,
+                genre: "Political Science, Economics, Ancient Indian Philosophy",
+                cover: "https://m.media-amazon.com/images/I/91jw5WLjFsL.jpg",
+                description: "This genre blends governance, economics, and philosophy, offering strategic insights into statecraft, war, diplomacy, and administration. Rooted in ancient Indian wisdom, it presents a practical and detailed guide to ruling a kingdom efficiently. Such texts emphasize realpolitik, law, and ethical leadership, providing timeless lessons on power, justice, and national prosperity through a structured and analytical approach to governance.",
+                pdf: "http://library.bjp.org:8080/jspui/bitstream/123456789/80/1/R.%20Shamasastry-Kautilya%27s%20Arthashastra%20%20%20%281915%29.pdf"
+            },
+            {
+                id: 13,
+                title: "History of medieval India by Satish Chandra",
+                author: "Satish Chandra",
+                year: "First published in 1972",
+                pages: 430,
+                genre: "History, Non-fiction, Indian Medieval History",
+                cover: "https://archive.org/services/img/satishchandrahistoryofmedievalindia/full/pct:200/0/default.jpg",
+                description: "This genre delves into the complexities of the human mind and moral conflict, often set against historical or colonial backdrops. It explores themes like imperialism, identity, and inner darkness. With rich symbolism and introspection, psychological and colonial fiction challenges readers to reflect on civilization, power, and the thin line between savagery and sanity within human nature.",
+                pdf: "https://dn790001.ca.archive.org/0/items/satishchandrahistoryofmedievalindia/Satish%20Chandra%20History%20of%20Medieval%20India.pdf"
+            }
+        ];
+
+        // DOM Elements
+        const booksGrids = document.querySelectorAll('.books-grid');
+        const bookModal = document.getElementById('bookModal');
+        const closeModal = document.getElementById('closeModal');
+        const detailCover = document.getElementById('detailCover');
+        const detailTitle = document.getElementById('detailTitle');
+        const detailAuthor = document.getElementById('detailAuthor');
+        const detailYear = document.getElementById('detailYear');
+        const detailPages = document.getElementById('detailPages');
+        const detailGenre = document.getElementById('detailGenre');
+        const detailDescription = document.getElementById('detailDescription');
+        const readBtn = document.getElementById('readBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        // Generate book cards
+        function generateBookCards() {
+            booksGrids.forEach(grid => {
+                // Clear existing content (if any)
+                grid.innerHTML = '';
+
+                // Add books to grid
+                books.forEach(book => {
+                    const bookCard = document.createElement('div');
+                    bookCard.className = 'book-card';
+                    bookCard.innerHTML = `
+                        <div class="book-cover" style="background-image: url('${book.cover}')"></div>
+                        <div class="book-info">
+                            <h3>${book.title}</h3>
+                            <div class="author">${book.author}</div>
+                            <div class="genre">${book.genre}</div>
+                        </div>
+                    `;
+
+                    // Add click event to open modal
+                    bookCard.addEventListener('click', () => openBookModal(book));
+
+                    grid.appendChild(bookCard);
+                });
+            });
+        }
+
+        // Open book modal with details
+        function openBookModal(book) {
+            detailCover.style.backgroundImage = `url('${book.cover}')`;
+            detailTitle.textContent = book.title;
+            detailAuthor.textContent = book.author;
+            detailYear.textContent = `Published: ${book.year}`;
+            detailPages.textContent = `${book.pages} pages`;
+            detailGenre.textContent = book.genre;
+            detailDescription.textContent = book.description;
+
+            // Set PDF links
+            readBtn.onclick = () => {
+                window.open(book.pdf, '_blank');
+            };
+
+            downloadBtn.onclick = () => {
+                const link = document.createElement('a');
+                link.href = book.pdf;
+                link.download = `${book.title.replace(/\s+/g, '_')}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            bookModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        // Close modal
+        function closeBookModal() {
+            bookModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        // Event listeners
+        closeModal.addEventListener('click', closeBookModal);
+
+        // Close modal when clicking outside content
+        window.addEventListener('click', (e) => {
+            if (e.target === bookModal) {
+                closeBookModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && bookModal.style.display === 'block') {
+                closeBookModal();
+            }
+        });
+
+        // Initialize the page
+        generateBookCards();
+
+        // Get the input and button elements
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+
+        // Function to filter and display matching books
+        function searchBooks(query) {
+            const lowerQuery = query.toLowerCase().trim();
+
+            // Filter books
+            const filteredBooks = books.filter(book =>
+                book.title.toLowerCase().includes(lowerQuery) ||
+                book.author.toLowerCase().includes(lowerQuery) ||
+                book.genre.toLowerCase().includes(lowerQuery) ||
+                book.description.toLowerCase().includes(lowerQuery)
+            );
+
+            // Clear old grid content
+            booksGrids.forEach(grid => grid.innerHTML = '');
+
+            // Show only filtered books
+            filteredBooks.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                bookCard.innerHTML = `
+                <div class="book-cover" style="background-image: url('${book.cover}')"></div>
+                <div class="book-info">
+                    <h3>${book.title}</h3>
+                    <div class="author">${book.author}</div>
+                    <div class="genre">${book.genre}</div>
+                </div>
+            `;
+                bookCard.addEventListener('click', () => openBookModal(book));
+                booksGrids[0].appendChild(bookCard); // Show results in the first grid only
+            });
+        }
+
+        // Trigger on button click
+        searchButton.addEventListener('click', () => {
+            searchBooks(searchInput.value);
+        });
+
+        // Trigger on Enter key press
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchBooks(searchInput.value);
+            }
+        });
+        const backButton = document.getElementById('backButton');
+
+        backButton.addEventListener('click', () => {
+            // Hide back button
+            backButton.style.display = 'none';
+
+            // Clear search field
+            searchInput.value = '';
+
+            // Restore original layout
+            generateBookCards();
+        });
+
+        // Show back button after searching
+        function searchBooks(query) {
+            const lowerQuery = query.toLowerCase().trim();
+
+            const filteredBooks = books.filter(book =>
+                book.title.toLowerCase().includes(lowerQuery) ||
+                book.author.toLowerCase().includes(lowerQuery) ||
+                book.genre.toLowerCase().includes(lowerQuery) ||
+                book.description.toLowerCase().includes(lowerQuery)
+            );
+
+            booksGrids.forEach(grid => grid.innerHTML = '');
+
+            filteredBooks.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                bookCard.innerHTML = `
+            <div class="book-cover" style="background-image: url('${book.cover}')"></div>
+            <div class="book-info">
+                <h3>${book.title}</h3>
+                <div class="author">${book.author}</div>
+                <div class="genre">${book.genre}</div>
+            </div>
+        `;
+                bookCard.addEventListener('click', () => openBookModal(book));
+                booksGrids[0].appendChild(bookCard);
+            });
+
+            // Show the back button if search applied
+            backButton.style.display = 'inline-block';
+        }
+
+    </script>
+</body>
+
+</html>
