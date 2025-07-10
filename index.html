@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virtual Bookshelf | Free Digital Library</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --deep-purple: #121212;
@@ -45,6 +47,7 @@
             min-height: 100vh;
             padding-bottom: 40px;
             background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
         }
 
         /* Header Styles */
@@ -74,31 +77,60 @@
         }
 
         .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: white;
-            letter-spacing: 1px;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.7px;
+            color: var(--text);
             position: relative;
-            animation: floatGlow 3s ease-in-out infinite;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeSlideUp 0.8s ease-out forwards;
+            animation-delay: 0.3s;
         }
 
-        @keyframes floatGlow {
-            0% {
-                transform: translateY(0px);
-                text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        .logo h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background-color: var(--accent-light);
+            transition: width 0.4s ease;
+        }
+
+        .logo h1:hover::after {
+            width: 100%;
+        }
+
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
             }
 
-            50% {
-                transform: translateY(-4px);
-                text-shadow: 0 0 18px rgba(255, 255, 255, 0.4);
-            }
-
-            100% {
-                transform: translateY(0px);
-                text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
+
+
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+
+        .logo h1:hover {
+            transform: scale(1.05);
+        }
+
 
         .search-bar {
             display: flex;
@@ -487,54 +519,6 @@
             }
         }
 
-        @media (max-width: 480px) {
-            .books-grid {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                /* 4 columns */
-                gap: 10px;
-            }
-
-            .book-card {
-                padding: 0;
-                margin: 0;
-                height: auto;
-            }
-
-            .book-cover {
-                height: 120px;
-                /* smaller for mobile */
-            }
-
-            .book-info {
-                padding: 10px;
-            }
-
-            .book-info h3 {
-                font-size: 0.8rem;
-            }
-
-            .book-info .author {
-                font-size: 0.7rem;
-            }
-
-            .book-info .genre {
-                font-size: 0.65rem;
-            }
-
-            .book-detail {
-                padding: 20px;
-            }
-
-            .detail-cover {
-                height: 250px;
-                flex: 0 0 180px;
-            }
-        }
-
-
-
-
 
         @media (max-width: 480px) {
             .books-grid {
@@ -552,6 +536,8 @@
             }
         }
     </style>
+    
+
 </head>
 
 <body>
@@ -559,7 +545,7 @@
     <header>
         <div class="logo">
             <i class="fas fa-book-open"></i>
-            <h1>Bookhub</h1>
+            <h1>Virtual Bookshelf</h1>
         </div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search over 2 million free books...">
@@ -637,7 +623,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>Bookhub &copy; 2025 | Free Digital Library for Everyone</p>
+        <p>Virtual Bookshelf &copy; 2023 | Free Digital Library for Everyone</p>
         <p>All books are in the public domain or shared under creative commons licenses</p>
     </footer>
 
